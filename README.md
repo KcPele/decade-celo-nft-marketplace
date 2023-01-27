@@ -3,6 +3,7 @@
 #### How it works
 
 -go to the live link here
+https://celo-nft-marketplace0-0-1v-jyo96fdgi-kcpele.vercel.app/
 
 - create an nft by puting in the nft contract address(0x18d828e16b6705c597ADC8d1e8d964D3A03021AF), token id(from 1 to 4) and the price in celo
 - create the nft.
