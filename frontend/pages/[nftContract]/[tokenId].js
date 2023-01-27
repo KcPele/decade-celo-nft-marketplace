@@ -105,28 +105,49 @@ export default function NFTDetails() {
   }
 
   // Function to call `updateListing` in the smart contract
+  const { config: updateListingConfig } = usePrepareContractWrite({
+    address: MARKETPLACE_ADDRESS,
+    abi: MarketplaceABI,
+    functionName: "updateListing",
+    args: [nftAddress, tokenId, newPrice],
+  });
+  const { write: writeUpdate } = useContractWrite(updateListingConfig);
 
   async function updateListing() {
     setUpdating(true);
-
-    const updateTxn = await MarketplaceContract.updateListing(
-      nftAddress,
-      tokenId,
-      parseEther(newPrice)
-    );
-    await updateTxn.wait();
+    try {
+      writeUpdate();
+      setUpdating(false);
+    } catch (error) {
+      console.log(error);
+    }
+    // const updateTxn = await MarketplaceContract.updateListing(
+    //   nftAddress,
+    //   tokenId,
+    //   parseEther(newPrice)
+    // );
+    // await updateTxn.wait();
     await fetchListing();
     setUpdating(false);
   }
 
   // Function to call `cancelListing` in the smart contract
+  const { config: cancelListingConfig } = usePrepareContractWrite({
+    address: MARKETPLACE_ADDRESS,
+    abi: MarketplaceABI,
+    functionName: "cancelListing",
+    args: [nftAddress, tokenId],
+  });
+  const { write: writeCancel } = useContractWrite(cancelListingConfig);
+
   async function cancelListing() {
     setCanceling(true);
-    const cancelTxn = await MarketplaceContract.cancelListing(
-      nftAddress,
-      tokenId
-    );
-    await cancelTxn.wait();
+    writeCancel();
+    // const cancelTxn = await MarketplaceContract.cancelListing(
+    //   nftAddress,
+    //   tokenId
+    // );
+    // await cancelTxn.wait();
     window.alert("Listing canceled");
     await router.push("/");
     setCanceling(false);
